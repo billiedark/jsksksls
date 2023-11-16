@@ -5,14 +5,19 @@ from aiogram import flags
 from aiogram.fsm.context import FSMContext
 
 from states import Form
+from database.database import Database
 import keyboards
 import text
 
 router = Router()
+db = Database('database/database.db')
 
 
 @router.message(Command("start"))
 async def start_handler(msg: Message):
+    if not db.user_exists(msg.from_user.id):
+        db.user_create(msg.from_user.id, msg.from_user.username)
+
     gif_file = FSInputFile("source/start.gif")
     await msg.answer_animation(animation=gif_file)
     await msg.answer(text.start, reply_markup=keyboards.menu)
@@ -42,3 +47,4 @@ async def contact_us_before_handler(cq: CallbackQuery, state: FSMContext):
 @router.message(Form.message_to_admin)
 async def contact_us_after_handler(msg: Message, state: FSMContext):
     await msg.answer(text.contact_us_after, reply_markup=keyboards.back)
+    await state.clear()
