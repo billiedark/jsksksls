@@ -13,3 +13,7 @@ class Database:
     def user_exists(self, user_id):
         self.cursor.execute("SELECT user_id FROM users WHERE user_id =?", (user_id,))
         return self.cursor.fetchone() is not None
+
+    def category_create(self, category_name):
+        self.cursor.execute("INSERT INTO `categories` (`name`) VALUES (?)", (category_name,))
+        self.connection.commit()

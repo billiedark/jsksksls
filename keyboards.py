@@ -14,5 +14,14 @@ menu = [
 ]
 menu = InlineKeyboardMarkup(inline_keyboard=menu)
 
+admin_menu = [
+    [InlineKeyboardButton(text="➕ Add a new item", callback_data="add_item"),],
+    [InlineKeyboardButton(text="➕ Add a new category", callback_data="add_category"),],
+]
+admin_menu = InlineKeyboardMarkup(inline_keyboard=admin_menu)
+
 back = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="◀️ Go back", callback_data="menu")]])
+back_admin = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="◀️ Go back", callback_data="admin")]])
+
 cancel = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🚫 Cancel", callback_data="menu")]])
+cancel_admin = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🚫 Cancel", callback_data="admin")]])

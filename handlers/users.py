@@ -24,8 +24,9 @@ async def start_handler(msg: Message):
 
 
 @router.callback_query(F.data == "menu")
-async def menu_handler(cq: CallbackQuery):
+async def menu_handler(cq: CallbackQuery, state: FSMContext):
     await cq.message.edit_text(text.start, reply_markup=keyboards.menu)
+    await state.clear()
 
 
 @router.callback_query(F.data == "profile")

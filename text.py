@@ -20,3 +20,9 @@ profile = """
 📊 <b>Average order</b>: $soon
 ⭐️ <b>Reviews</b>: soon
 """
+
+admin_panel = "🤠 Welcome back!"
+admin_add_category = "Enter category name:"
+admin_add_item = "Enter item name:"
+admin_add_category_after = "Your category has been added!"
+admin_add_item_after = "Your item has been added!"
