@@ -2,9 +2,8 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardBu
 
 
 menu = [
-    [InlineKeyboardButton(text="🔥 BUNDLE DEALS", callback_data="bundle_deals"),
-    InlineKeyboardButton(text="🛒 Cart", callback_data="cart")],
-    [InlineKeyboardButton(text="💊 Listings", callback_data="listings"),
+    [InlineKeyboardButton(text="💊 Listings", callback_data="listings")],
+    [InlineKeyboardButton(text="🛒 Cart", callback_data="cart"),
     InlineKeyboardButton(text="📦 Orders", callback_data="orders")],
     [InlineKeyboardButton(text="🧾 Export price list", callback_data="export_prices")],
     [InlineKeyboardButton(text="⭐️ Reviews", callback_data="reviews"),
@@ -25,3 +24,15 @@ back_admin = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="�
 
 cancel = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🚫 Cancel", callback_data="menu")]])
 cancel_admin = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="🚫 Cancel", callback_data="admin")]])
+
+item_purchase = [
+    [InlineKeyboardButton(text="", callback_data="listings")],
+    [InlineKeyboardButton(text="🛒 Cart", callback_data="cart"),
+    InlineKeyboardButton(text="📦 Orders", callback_data="orders")],
+    [InlineKeyboardButton(text="🧾 Export price list", callback_data="export_prices")],
+    [InlineKeyboardButton(text="⭐️ Reviews", callback_data="reviews"),
+    InlineKeyboardButton(text="ℹ️ About", callback_data="about")],
+    [InlineKeyboardButton(text="✉️ Contact us", callback_data="contact_us"),
+    InlineKeyboardButton(text="👤 Profile", callback_data="profile")]
+]
+item_purchase = InlineKeyboardMarkup(inline_keyboard=item_purchase)
