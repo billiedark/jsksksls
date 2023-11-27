@@ -76,21 +76,36 @@ async def category_handler(cq: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data.startswith("item-"))
-async def category_handler(cq: CallbackQuery, state: FSMContext):
-    item_id = cq.data.split("-")[1]
+@router.callback_query(F.data.startswith("minus-"))
+@router.callback_query(F.data.startswith("plus-"))
+async def item_handler(cq: CallbackQuery, state: FSMContext):
+    cq_data = cq.data.split("-")
+    item_id = cq_data[1]
     item = db.get_item(item_id)
     print(item)
+
     img = FSInputFile(item[7])
 
+    cart_mode = True if cq_data[0] == "minus" or cq_data[0] == "plus" else False
+    cart_count = int(cq_data[2]) if cart_mode else 0
+    send_mode = cq.message.edit_caption if cart_mode else cq.message.answer_photo
+    print(cart_count)
+
     builder = InlineKeyboardBuilder()
-    builder.button(text="➖", callback_data=f"minus-{item_id}")
-    builder.button(text="➕", callback_data=f"plus-{item_id}")
+    builder.button(text="➖", callback_data=f"minus-{item_id}-{cart_count - 1 if cart_count > 0 else cart_count}")
+    builder.button(text="➕", callback_data=f"plus-{item_id}-{cart_count + 1}")
 
     builder.button(text=text.add_to_cart, callback_data=f"atc-{item_id}")
-    builder.button(text=text.go_back, callback_data="menu")
+    builder.button(text=text.go_back, callback_data="delete-this")
     builder.adjust(2)
 
-    await cq.message.answer_photo(photo=img, caption=text.item_caption.format(item_name=item[2], item_stock=item[4],
-                                                                              item_type=item[5], item_rating=5,
-                                                                              item_description=item[3]), reply_markup=builder.as_markup())
+    await send_mode(photo=img, caption=text.item_caption.format(item_name=item[2], item_stock=item[4],
+                                                                item_type=item[5], item_rating=5,
+                                                                item_description=item[3]), reply_markup=builder.as_markup())
+    # await cq.message.delete()
+
+
+@router.callback_query(F.data.startswith("delete-this"))
+async def delete_this_handler(cq: CallbackQuery, state: FSMContext):
     await cq.message.delete()
+    await state.clear()
