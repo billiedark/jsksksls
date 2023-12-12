@@ -51,7 +51,10 @@ pc
 admin_add_new_item_after_two = "Your item has been added!"
 
 go_back = "◀️ Go back"
-add_to_cart = "🛒 Add to cart"
+order = "🛒 Order"
+enter_manually = "Enter Quantity Manually"
+enter_manually_message = "🫐 Enter a quantity:"
+enter_manually_message_after = "🍷 Quantity Entered: {count}"
 
 item_caption = """
 🌳 <b>{item_name}</b>
@@ -61,5 +64,6 @@ item_caption = """
 📌<b>Description</b>:
 {item_description}
 
-
 """
+item_caption_prices = "📔 <b>Prices</b>:\n"
+item_caption_cart = "\n🛒 <b>Added</b>: {count}\n💵 <b>Total price</b>: {total_price}"

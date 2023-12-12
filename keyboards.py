@@ -36,3 +36,5 @@ item_purchase = [
     InlineKeyboardButton(text="👤 Profile", callback_data="profile")]
 ]
 item_purchase = InlineKeyboardMarkup(inline_keyboard=item_purchase)
+
+done_manually = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text="Done", callback_data="{data}")]])

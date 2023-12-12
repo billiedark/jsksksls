@@ -6,3 +6,5 @@ class Form(StatesGroup):
 
     add_new_category = State()
     add_new_item = State()
+
+    enter_manually = State()

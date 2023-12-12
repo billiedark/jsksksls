@@ -78,3 +78,8 @@ async def contact_us_after_handler(msg: Message, state: FSMContext):
 
         await msg.answer(text.admin_add_new_item_after_two, reply_markup=keyboards.back_admin)
         await state.clear()
+
+
+@router.message()
+async def delete_messages(msg: Message):
+    await msg.delete()

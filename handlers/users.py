@@ -91,21 +91,57 @@ async def item_handler(cq: CallbackQuery, state: FSMContext):
     send_mode = cq.message.edit_caption if cart_mode else cq.message.answer_photo
     print(cart_count)
 
+    # Button builder
     builder = InlineKeyboardBuilder()
-    builder.button(text="➖", callback_data=f"minus-{item_id}-{cart_count - 1 if cart_count > 0 else cart_count}")
     builder.button(text="➕", callback_data=f"plus-{item_id}-{cart_count + 1}")
+    if cart_count > 0:
+        builder.button(text="➖", callback_data=f"minus-{item_id}-{cart_count - 1 if cart_count > 0 else cart_count}")
 
-    builder.button(text=text.add_to_cart, callback_data=f"atc-{item_id}")
+        builder.button(text=text.order, callback_data=f"order-{item_id}-{cart_count}")
+    builder.button(text=text.enter_manually, callback_data=f"manually-{item_id}")
     builder.button(text=text.go_back, callback_data="delete-this")
-    builder.adjust(2)
+    builder.adjust(2, 1)
 
-    await send_mode(photo=img, caption=text.item_caption.format(item_name=item[2], item_stock=item[4],
-                                                                item_type=item[5], item_rating=5,
-                                                                item_description=item[3]), reply_markup=builder.as_markup())
+    # Prices builder
+    prices = text.item_caption_prices
+    for price in item[6].split(";"):
+        price_data = price.split("-")
+        prices += f"{price_data[0]}{item[5]} for {price_data[1]} USD\n"
+
+    # Cart builder
+    cart = ""
+    if cart_count > 0:
+        cart += text.item_caption_cart.format(count=cart_count, total_price=item[4] * cart_count)
+
+    # Final text builder
+    send_text = text.item_caption.format(item_name=item[2], item_stock=item[4], item_type=item[5], item_rating=5,
+                                         item_description=item[3]) + prices + cart
+
+    await send_mode(photo=img, caption=send_text, reply_markup=builder.as_markup())
     # await cq.message.delete()
 
 
 @router.callback_query(F.data.startswith("delete-this"))
 async def delete_this_handler(cq: CallbackQuery, state: FSMContext):
     await cq.message.delete()
+    await state.clear()
+
+
+@router.callback_query(F.data.startswith("manually-"))
+async def manually_enter_handler(cq: CallbackQuery, state: FSMContext):
+    await cq.message.delete()
+    await state.set_state(Form.enter_manually)
+
+    # send the message
+    await cq.message.answer(text.enter_manually_message)
+
+
+@router.message(Form.enter_manually)
+async def contact_us_after_handler(msg: Message, state: FSMContext):
+    await msg.message.delete()
+
+    # check if valid value
+    count = msg.message.text
+    print(count)
+    await msg.answer(text.enter_manually_message_after.format(count=count), reply_markup=keyboards.done_manually.fomat(data=11))
     await state.clear()
